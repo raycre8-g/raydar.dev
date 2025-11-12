@@ -322,7 +322,7 @@ const FeaturedProject: React.FC = () => {
                         If you’re building a product that needs reliable payment flows, merchant settlements, or API integrations, I can architect and deliver the system end-to-end.
                       </p>
                       <div className="flex gap-2 sm:gap-3">
-                        <a href="mailto:hi@raydar.dev" className="text-emerald-300 underline underline-offset-4">aderemi@raydar.dev</a>
+                        <a href="mailto:aderemi@raydar.dev" className="text-emerald-300 underline underline-offset-4">aderemi@raydar.dev</a>
                         <a href="#contact" className="text-emerald-300 underline underline-offset-4">Book a call</a>
                       </div>
                     </section>

@@ -92,7 +92,7 @@ const ContactSection = () => {
                   <Mail className="h-6 w-6 text-primary-foreground" />
                 </div>
                 <h3 className="font-semibold text-foreground">Email</h3>
-                <p className="text-muted-foreground text-sm">john.doe@example.com</p>
+                <p className="text-muted-foreground text-sm">aderemi@raydar.dev</p>
                 <Button
                   variant="outline"
                   size="sm"

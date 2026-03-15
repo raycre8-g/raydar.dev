@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import FeaturedProject from '@/components/FeaturedProject'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Github, Eye } from 'lucide-react'
-import { BorderTrail } from '@/components/motion-primitives/border-trail'
+import { Github, Eye, ArrowDown } from 'lucide-react'
 import { Disclosure, DisclosureTrigger, DisclosureContent } from '@/components/motion-primitives/disclosure'
 import { motion } from 'motion/react'
 
@@ -56,79 +55,68 @@ const ProjectsSection = () => {
     const [isOpen, setIsOpen] = useState(false)
 
     const imageVariants = {
-      collapsed: { scale: 1, filter: 'blur(0px)' },
-      expanded: { scale: 1.08, filter: 'blur(3px)' },
+      collapsed: { scale: 1, filter: 'grayscale(100%) opacity(0.7)' },
+      expanded: { scale: 1.05, filter: 'grayscale(0%) opacity(1)' },
     }
 
     const transition = {
       type: 'spring' as const,
-      stiffness: 26.7,
-      damping: 4.1,
-      mass: 0.2,
+      stiffness: 30,
+      damping: 10,
+      mass: 0.5,
     }
 
     const imageSrc = project.imageUrl
       ? project.imageUrl
-      : `https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=Modern%20${project.title.replace(' ', '%20')}%20application%20screenshot%20professional%20UI%20design%20purple%20accent%20colors%20clean%20interface&image_size=landscape_16_9`
+      : `https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=Modern%20${project.title.replace(' ', '%20')}%20application%20screenshot%20minimalist%20UI&image_size=landscape_16_9`
 
     return (
       <div
-        className={`relative h-auto overflow-hidden rounded-xl group hover:scale-[1.02] transition-all duration-300 hover:shadow-xl hover:shadow-indigo-500/10 ${
-          project.featured ? 'ring-2 ring-indigo-500/20' : ''
-        }`}
+        className="relative group overflow-hidden rounded-[2rem] bg-white/[0.02] border border-white/5 transition-all duration-500 hover:border-white/20"
         style={{ animationDelay: `${index * 150}ms` }}
       >
-        <div onClick={() => setIsOpen(!isOpen)} className="relative">
+        <div onClick={() => setIsOpen(!isOpen)} className="relative aspect-[16/10] cursor-pointer overflow-hidden">
           <motion.img
             src={imageSrc}
             alt={project.title}
-            className="pointer-events-none h-full w-full select-none object-cover"
+            className="h-full w-full object-cover"
             animate={isOpen ? 'expanded' : 'collapsed'}
             variants={imageVariants}
             transition={transition}
           />
-          {project.featured && (
-            <Badge className="absolute top-4 right-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-primary-foreground text-xs">
-              Featured
-            </Badge>
-          )}
-          {project.status === 'closed' && (
-            <Badge className="absolute top-4 left-4 bg-red-600 text-primary-foreground text-xs">
-              Closed
-            </Badge>
-          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60"></div>
+          
+          <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
+            <h4 className="text-xl font-bold text-white font-outfit">{project.title}</h4>
+            <div className={`w-8 h-8 rounded-full border border-white/20 flex items-center justify-center transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`}>
+              <ArrowDown className="w-4 h-4 text-white" />
+            </div>
+          </div>
         </div>
 
-        <Disclosure onOpenChange={setIsOpen} open={isOpen} className="absolute bottom-0 left-0 right-0 z-10 bg-card/80 backdrop-blur-md px-4 py-2">
-          <DisclosureTrigger>
-            <button
-              className="w-full text-left text-[14px] font-medium text-foreground"
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {project.title}
-            </button>
-          </DisclosureTrigger>
+        <Disclosure onOpenChange={setIsOpen} open={isOpen}>
           <DisclosureContent>
-            <div className="flex flex-col pb-4 text-sm text-muted-foreground">
-              <p className="line-clamp-3">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mt-3">
+            <div className="px-8 pb-8 pt-2 space-y-6">
+              <p className="text-sm text-muted-foreground font-light leading-relaxed">
+                {project.description}
+              </p>
+              
+              <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
-                  <Badge key={tech} variant="outline" className={`text-xs ${getTechnologyStyle()}`}>
+                  <span key={tech} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
                     {tech}
-                  </Badge>
+                  </span>
                 ))}
               </div>
-              <div className="mt-3 grid grid-cols-2 gap-2">
+
+              <div className="flex gap-3">
                 {project.githubUrl && (
                   <Button
-                    variant="default"
                     size="sm"
                     onClick={() => window.open(project.githubUrl!, '_blank')}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-primary-foreground"
+                    className="bg-white text-black hover:bg-white/90 rounded-full px-6 font-bold text-xs"
                   >
-                    <Github className="h-4 w-4 mr-2" />
-                    Code
+                    Source
                   </Button>
                 )}
 
@@ -137,25 +125,21 @@ const ProjectsSection = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => window.open(project.liveUrl!, '_blank')}
-                    className="w-full border-border text-foreground hover:bg-muted"
+                    className="border-white/10 rounded-full px-6 font-bold text-xs hover:bg-white/5 transition-all"
                   >
-                    <Eye className="h-4 w-4 mr-2" />
-                    {project.status === 'closed' ? 'Unavailable' : 'Demo'}
+                    Explore
                   </Button>
                 )}
               </div>
             </div>
           </DisclosureContent>
         </Disclosure>
-
-        {/* Animated border trail overlay */}
-        <BorderTrail className="bg-gradient-to-r from-indigo-600 to-purple-600" size={60} />
       </div>
     )
   }
 
   return (
-    <section id="projects" className="py-16 sm:py-20 px-2 sm:px-6 md:px-10 bg-gradient-to-b from-background to-slate-900/20">
+    <section id="projects" className="py-32 px-4 bg-background border-t border-white/5">
       <div className="container mx-auto px-4">
         {/* Featured project showcase */}
         <FeaturedProject />

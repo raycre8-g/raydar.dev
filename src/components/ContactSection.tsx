@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent } from '@/components/ui/card'
 import { Github, Linkedin, Mail, Send, X } from 'lucide-react'
 
 interface ContactForm {
@@ -71,196 +70,110 @@ const ContactSection = () => {
   }
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-b from-slate-900/20 to-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-            Get In Touch
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            I'm always interested in hearing about new opportunities and interesting projects. 
-            Feel free to reach out if you'd like to connect!
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto">
-          {/* Contact Methods */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <Card className="text-center p-6 hover:scale-105 transition-all duration-300 bg-card/50 backdrop-blur-sm border-border/50">
-              <CardContent className="flex flex-col items-center space-y-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
-                  <Mail className="h-6 w-6 text-primary-foreground" />
-                </div>
-                <h3 className="font-semibold text-foreground">Email</h3>
-                <p className="text-muted-foreground text-sm">aderemi@raydar.dev</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSocialClick('email')}
-                  className="border-border text-foreground hover:bg-muted"
+    <section id="contact" className="py-32 bg-background relative overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col md:flex-row gap-16 items-start">
+          <div className="w-full md:w-5/12 space-y-8">
+            <div className="space-y-4">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold font-outfit">Contact</span>
+              <h2 className="text-4xl md:text-6xl font-extrabold text-foreground font-outfit leading-tight">
+                Let's build something great.
+              </h2>
+            </div>
+            <p className="text-lg text-muted-foreground font-light leading-relaxed">
+              Open for new opportunities, collaborations, or just a chat about system architecture and product engineering.
+            </p>
+            
+            <div className="space-y-6 pt-8">
+              {[
+                { label: 'Email', value: 'aderemi@raydar.dev', icon: <Mail className="w-4 h-4" />, action: () => handleSocialClick('email') },
+                { label: 'LinkedIn', value: 'Aderemi Azeez', icon: <Linkedin className="w-4 h-4" />, action: () => handleSocialClick('linkedin') },
+                { label: 'GitHub', value: '@raycre8-g', icon: <Github className="w-4 h-4" />, action: () => handleSocialClick('github') }
+              ].map((item, i) => (
+                <button 
+                  key={i} 
+                  onClick={item.action}
+                  className="flex items-center gap-6 group w-full text-left"
                 >
-                  Send Email
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-6 hover:scale-105 transition-all duration-300 bg-card/50 backdrop-blur-sm border-border/50">
-              <CardContent className="flex flex-col items-center space-y-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
-                  <Github className="h-6 w-6 text-primary-foreground" />
-                </div>
-                <h3 className="font-semibold text-foreground">GitHub</h3>
-                <p className="text-muted-foreground text-sm">@johndoe</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSocialClick('github')}
-                  className="border-border text-foreground hover:bg-muted"
-                >
-                  View Profile
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center p-6 hover:scale-105 transition-all duration-300 bg-card/50 backdrop-blur-sm border-border/50">
-              <CardContent className="flex flex-col items-center space-y-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center">
-                  <Linkedin className="h-6 w-6 text-primary-foreground" />
-                </div>
-                <h3 className="font-semibold text-foreground">LinkedIn</h3>
-                <p className="text-muted-foreground text-sm">John Doe</p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSocialClick('linkedin')}
-                  className="border-border text-foreground hover:bg-muted"
-                >
-                  Connect
-                </Button>
-              </CardContent>
-            </Card>
+                  <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-500">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <span className="block text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{item.label}</span>
+                    <span className="text-sm font-medium text-foreground">{item.value}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Contact Form Dialog */}
-          <div className="text-center">
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-primary-foreground px-8 py-6 text-lg font-semibold transition-all duration-300 hover:scale-105"
-                >
-                  <Send className="mr-2 h-5 w-5" />
-                  Send Message
-                </Button>
-              </DialogTrigger>
-              
-              <DialogContent className="sm:max-w-[500px] bg-background/95 backdrop-blur-sm border-border/50">
-                <form onSubmit={handleSubmit}>
-                  <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold text-foreground">
-                      Send Me a Message
-                    </DialogTitle>
-                    <DialogDescription className="text-muted-foreground">
-                      Fill out the form below and I'll get back to you as soon as possible.
-                    </DialogDescription>
-                  </DialogHeader>
-                  
-                  <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="name" className="text-foreground">
-                        Name
-                      </Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        placeholder="Your name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        className="bg-background/50 border-border/50 focus:border-indigo-600 focus:ring-indigo-600/20"
-                      />
-                    </div>
-                    
-                    <div className="grid gap-2">
-                      <Label htmlFor="email" className="text-foreground">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="your.email@example.com"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="bg-background/50 border-border/50 focus:border-indigo-600 focus:ring-indigo-600/20"
-                      />
-                    </div>
-                    
-                    <div className="grid gap-2">
-                      <Label htmlFor="subject" className="text-foreground">
-                        Subject
-                      </Label>
-                      <Input
-                        id="subject"
-                        name="subject"
-                        placeholder="What's this about?"
-                        value={formData.subject}
-                        onChange={handleInputChange}
-                        required
-                        className="bg-background/50 border-border/50 focus:border-indigo-600 focus:ring-indigo-600/20"
-                      />
-                    </div>
-                    
-                    <div className="grid gap-2">
-                      <Label htmlFor="message" className="text-foreground">
-                        Message
-                      </Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        placeholder="Tell me about your project or question..."
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        required
-                        rows={4}
-                        className="bg-background/50 border-border/50 focus:border-indigo-600 focus:ring-indigo-600/20 resize-none"
-                      />
-                    </div>
+          <div className="w-full md:w-7/12">
+            <div className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-8 md:p-12 backdrop-blur-sm shadow-2xl">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ml-1">Full Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      placeholder="Jane Doe"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      required
+                      className="bg-white/[0.03] border-white/5 rounded-2xl p-6 h-auto placeholder:text-white/20 focus:bg-white/[0.05] transition-all"
+                    />
                   </div>
-                  
-                  <DialogFooter className="gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsOpen(false)}
-                      className="border-border/50 hover:bg-background/80"
-                      disabled={isSubmitting}
-                    >
-                      <X className="mr-2 h-4 w-4" />
-                      Cancel
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-primary-foreground"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 h-4 w-4" />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ml-1">Email Address</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="jane@example.com"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="bg-white/[0.03] border-white/5 rounded-2xl p-6 h-auto placeholder:text-white/20 focus:bg-white/[0.05] transition-all"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="subject" className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ml-1">Subject</Label>
+                  <Input
+                    id="subject"
+                    name="subject"
+                    placeholder="Project Inquiry"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-white/[0.03] border-white/5 rounded-2xl p-6 h-auto placeholder:text-white/20 focus:bg-white/[0.05] transition-all"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="message" className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ml-1">Message</Label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    placeholder="Tell me about your vision..."
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                    rows={5}
+                    className="bg-white/[0.03] border-white/5 rounded-2xl p-6 h-auto placeholder:text-white/20 focus:bg-white/[0.05] transition-all resize-none"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-white text-black hover:bg-white/90 rounded-full py-8 text-sm font-bold shadow-xl shadow-white/5 transition-all active:scale-[0.98]"
+                >
+                  {isSubmitting ? 'Sending Request...' : 'Send Message'}
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,33 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { ArrowDown, Download } from 'lucide-react'
+import { ArrowDown, Download, Sparkles } from 'lucide-react'
 import { TextLoop } from '@/components/motion-primitives/text-loop'
-import LetterGlitch from '@/components/backgrounds/LetterGlitch'
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 
 const HeroSection = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Mouse movement for spotlight/parallax
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // Smooth springs for parallax
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 })
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 })
+
+  // Parallax transforms
+  const translateX = useTransform(springX, (x) => (x - window.innerWidth / 2) / 40)
+  const translateY = useTransform(springY, (y) => (y - window.innerHeight / 2) / 40)
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX)
+      mouseY.set(e.clientY)
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [mouseX, mouseY])
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
@@ -12,130 +35,171 @@ const HeroSection = () => {
     }
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const }
+    },
+  }
+
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden py-10 sm:py-12 md:py-16">
-      {/* Letter Glitch Background */}
-      <div className="absolute inset-0 opacity-30 pointer-events-none">
-        <LetterGlitch glitchColors={['#2b4539', '#61dca3', '#61b3dc']} outerVignette={false} centerVignette={true} smooth={true} />
-      </div>
-      {/* Image Overlay */}
-      <div className="absolute inset-0 pointer-events-none">
+    <section
+      id="hero"
+      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black"
+      ref={containerRef}
+    >
+      {/* Dynamic Cursor Spotlight - Kept for effect, but default cursor is now visible */}
+      <motion.div
+        className="pointer-events-none fixed top-0 left-0 w-[40rem] h-[40rem] bg-white/[0.04] rounded-full blur-[100px] z-20 mix-blend-soft-light"
+        style={{ x: springX, y: springY, translateX: '-50%', translateY: '-50%' }}
+      />
+
+      {/* Parallax Background & Image Layer */}
+      <motion.div
+        className="absolute inset-0 z-0 overflow-hidden"
+        style={{ x: translateX, y: translateY }}
+      >
+        {/* Background Glows */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-white/[0.03] rounded-full blur-[150px]"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-white/[0.02] rounded-full blur-[120px]"></div>
+
+        {/* Subtle Portrait Overlay */}
         <img
           src="/aderemi.png"
-          alt="Hero overlay background"
-          className="w-full h-full object-cover object-[50%_60%] sm:object-[50%_55%] md:object-[80%_30%] opacity-55 sm:opacity-25 md:opacity-80 mix-blend-normal sm:mix-blend-overlay select-none"
+          alt="Portrait background"
+          className="absolute right-0 bottom-0 min-w-[50%] min-h-[80%] object-contain object-right-bottom opacity-[0.08] filter grayscale mix-blend-screen select-none pointer-events-none"
           loading="eager"
-          decoding="async"
-          aria-hidden="true"
-          draggable="false"
         />
-      </div>
-      {/* Subtle radial overlay */}
-      <div className="absolute inset-0 bg-[#141414]/40 pointer-events-none"></div>
-      
-      <div className="container mx-auto px-4 text-center relative z-10">
-        <div className="max-w-4xl mx-auto">
-          {/* Avatar */}
-          <div className="mb-8 flex justify-center">
-            <Avatar className="w-24 h-24 sm:w-28 sm:h-28 md:w-40 md:h-40 ring-4 ring-border transition-all duration-300">
-              <AvatarImage 
-                src="/adeAvatar.png" 
-                alt="Aderemi Avatar" 
-                className="object-cover object-top"
-              />
-              <AvatarFallback className="bg-gradient-to-br from-purple-600 to-indigo-600 text-white text-2xl font-bold">
-                AA
-              </AvatarFallback>
-            </Avatar>
-          </div>
+      </motion.div>
 
-          {/* Name and Title */}
-          <div className="mb-6">
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-foreground">
-              Hi, I'm Raydar
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:6rem_6rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+
+      <motion.div
+        className="container mx-auto px-4 relative z-50"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="max-w-6xl mx-auto flex flex-col items-center">
+
+          {/* Status badge */}
+          <motion.div variants={itemVariants} className="mb-16">
+            <div className="group relative">
+              <div className="absolute inset-0 bg-white/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="relative inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-xl text-[10px] font-black tracking-[0.3em] uppercase text-white/70">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-40"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                </span>
+                Available for new projects
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Main Title */}
+          <motion.div
+            variants={itemVariants}
+            style={{
+              x: useTransform(springX, (x) => (x - window.innerWidth / 2) / -80),
+              y: useTransform(springY, (y) => (y - window.innerHeight / 2) / -80)
+            }}
+            className="text-center"
+          >
+            <h1 className="text-7xl sm:text-[10rem] md:text-[12rem] lg:text-[15rem] font-black tracking-tighter leading-none select-none">
+              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/20 drop-shadow-2xl font-outfit">
+                RAYDAR
+              </span>
+              <span className="text-white/10">.</span>
             </h1>
-            {/* Bio */}
-          <div className="mb-8 max-w-2xl mx-auto px-4 sm:px-6 md:px-0">
-            {/* <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-              I build scalable systems that power modern startups.
-            </p> */}
-          </div>
-            <div className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-medium mb-3 h-7 sm:h-8 md:h-10 text-foreground">
-              I specialize in{' '}
-              <TextLoop interval={2}>
-                <span>Web Apps & Dashboards</span>
-                <span>API Integrations</span>
-                <span>Automation Tools</span>
-                <span>Payment Platforms</span>
-                <span>Data-driven Systems</span>
-              </TextLoop>
-            </div>
-            <div className="text-muted-foreground">
-              <p className="text-base sm:text-lg leading-relaxed px-4 sm:px-8 md:px-0 max-w-2xl mx-auto text-justify sm:text-left">
-              From fintech to SaaS, I help businesses launch and scale products that
-              handle real-world transactions — fast, secure, and reliable.
-              </p>
-            </div>
-          </div>
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-12">
-            <Button 
-              size="lg"
-              onClick={() => scrollToSection('contact')}
-              aria-label="Contact me"
-              className="bg-gradient-to-r rounded-full from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-primary-foreground px-6 py-4 text-base sm:px-8 sm:py-6 sm:text-lg font-semibold transition-all duration-300 hover:scale-105"
-            >
-              Let's Work Together
-            </Button>
-            
-            <Button 
-              size="lg"
-              variant="outline"
-              aria-label="Download resume"
-              className="border-border rounded-full text-foreground hover:bg-muted px-6 py-4 text-base sm:px-8 sm:py-6 sm:text-lg font-semibold transition-all duration-300"
-              onClick={async (e) => {
-                e.preventDefault()
-                try {
-                  const res = await fetch('/AderemiAzeezResume.pdf')
-                  if (!res.ok) throw new Error('Failed to fetch resume')
-                  const blob = await res.blob()
-                  const url = window.URL.createObjectURL(blob)
-                  const link = document.createElement('a')
-                  link.href = url
-                  link.download = 'Aderemi_Azeez_Resume.pdf'
-                  document.body.appendChild(link)
-                  link.click()
-                  document.body.removeChild(link)
-                  window.URL.revokeObjectURL(url)
-                } catch (e) {
-                  // Fallback: open in a new tab if direct download fails
-                  window.open('/AderemiAzeezResume.pdf', '_blank')
-                }
-              }}
-            >
-              <Download className="mr-2 h-5 w-5" />
-              Download Resume
-            </Button>
-          </div>
+          </motion.div>
 
-          {/* Scroll Indicator */}
-          <div className="flex justify-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => scrollToSection('skills')}
-              aria-label="Scroll to skills section"
-              className="text-foreground hover:text-primary"
-            >
-              <ArrowDown className="h-6 w-6" />
-              <span className="sr-only">Scroll to skills section</span>
-            </Button>
-          </div>
+          {/* Intro */}
+          <motion.div variants={itemVariants} className="mt-8 space-y-10 text-center max-w-2xl">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-white/50 tracking-tight leading-snug font-outfit">
+              Building <span className="text-white font-medium italic underline decoration-white/20 underline-offset-8">
+                <TextLoop interval={3.5}>
+                  <span>Payment Tools</span>
+                  <span>Web Systems</span>
+                  <span>Cloud Servers</span>
+                  <span>Reliable APIs</span>
+                  <span>Great Products</span>
+                </TextLoop>
+              </span>
+            </h2>
+
+            <p className="text-lg sm:text-xl text-white/30 leading-relaxed font-extralight tracking-wide">
+              I build fast and reliable software for businesses.
+              From handling payments to scaling apps on the cloud.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center pt-8">
+              <Button
+                size="lg"
+                onClick={() => scrollToSection('contact')}
+                className="group relative overflow-hidden bg-white text-black hover:bg-white rounded-full px-12 py-9 text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-700 hover:scale-105 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.1)] font-outfit"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.05] to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                Start a project
+                <Sparkles className="ml-3 h-4 w-4 transition-transform group-hover:rotate-12" />
+              </Button>
+
+              <Button
+                size="lg"
+                variant="ghost"
+                className="text-white/40 hover:text-white hover:bg-white/5 rounded-full px-12 py-9 text-[11px] font-black uppercase tracking-[0.2em] transition-all font-outfit"
+                onClick={() => window.open('/AderemiAzeezResume.pdf', '_blank')}
+              >
+                <Download className="mr-3 h-4 w-4" />
+                Download CV
+              </Button>
+            </div>
+          </motion.div>
         </div>
+      </motion.div>
+
+      {/* Cinematic Borders */}
+      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black to-transparent z-10"></div>
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent z-10"></div>
+
+      {/* Side HUD Elements */}
+      <div className="absolute left-12 bottom-12 hidden lg:flex flex-col gap-6 opacity-20">
+        <div className="w-px h-24 bg-white/20"></div>
+        <span className="text-[9px] [writing-mode:vertical-lr] uppercase tracking-[0.8em] font-black font-outfit">Architecture // Reliability</span>
       </div>
 
-      {/* Gradient Overlay */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
+      <div className="absolute right-12 bottom-12 hidden lg:flex flex-col gap-6 opacity-20 items-end">
+        <span className="text-[9px] [writing-mode:vertical-lr] uppercase tracking-[0.8em] font-black font-outfit">MXXVI // Aderemi Azeez Portfolio</span>
+        <div className="w-px h-24 bg-white/20"></div>
+      </div>
+
+      {/* Floating Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 1.5 }}
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6 cursor-pointer group"
+        onClick={() => scrollToSection('about')}
+      >
+        <span className="text-[10px] uppercase tracking-[0.5em] font-black text-white/10 group-hover:text-white/50 transition-all font-outfit">Explore</span>
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ArrowDown className="h-4 w-4 text-white/10 group-hover:text-white/50 transition-all" />
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

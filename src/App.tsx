@@ -8,8 +8,7 @@ import ContactSection from './components/ContactSection'
 import './App.css'
 import GradualBlur from '@/components/animations/GradualBlur'
 import LogoLoop from '@/components/animations/LogoLoop'
-import ProfileCardSection from '@/components/ProfileCardSection'
-import {SiTypescript, SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiPython, SiPostgresql, SiMongodb, SiDocker, SiAmazonwebservices} from 'react-icons/si'
+import { SiTypescript, SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiPython, SiPostgresql, SiMongodb, SiDocker, SiAmazonwebservices } from 'react-icons/si'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
@@ -63,45 +62,50 @@ function App() {
       <main>
         <HeroSection />
         {/* Logo loop showcase just below hero */}
-        <section id="logos" className="py-8 bg-gradient-to-t from-transparent to-background bg-background">
+        <section id="logos" className="py-20 bg-background border-y border-white/5">
           <div className="container mx-auto px-4">
             <LogoLoop
               logos={techLogos}
-              speed={120}
+              speed={20}
               direction="left"
-              logoHeight={65}
-              gap={40}
+              logoHeight={40}
+              gap={60}
               pauseOnHover
               fadeOut
-              fadeOutColor='#0a0a0a'
-              className="mx-auto max-w-5xl"
+              fadeOutColor='#000000'
+              className="mx-auto grayscale opacity-50 hover:opacity-100 transition-opacity duration-1000"
             />
           </div>
         </section>
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
-        <ProfileCardSection />
+        <ContactSection />
       </main>
 
       {/* Footer */}
-      <footer className="bg-slate-950/50 border-t border-border/50 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-muted-foreground">
-            © 2025 Aderemi O Azeez. Built with React, TypeScript, and Tailwind CSS.
-          </p>
+      <footer className="bg-background border-t border-white/5 py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="text-foreground font-outfit font-black text-xl tracking-tighter">
+              RAYDAR<span className="text-muted-foreground">.</span>
+            </div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-bold">
+              © 2026 Aderemi O Azeez. All Rights Reserved.
+            </p>
+          </div>
         </div>
       </footer>
       <GradualBlur
-          target="page"
-          position="bottom"
-          height="2.5rem"
-          strength={2}
-          divCount={5}
-          curve="bezier"
-          exponential={true}
-          opacity={1}
-        />
+        target="page"
+        position="bottom"
+        height="2.5rem"
+        strength={2}
+        divCount={5}
+        curve="bezier"
+        exponential={true}
+        opacity={1}
+      />
     </div>
   )
 }

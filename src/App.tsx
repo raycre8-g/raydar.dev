@@ -8,10 +8,22 @@ import ContactSection from './components/ContactSection'
 import './App.css'
 import GradualBlur from '@/components/animations/GradualBlur'
 import LogoLoop from '@/components/animations/LogoLoop'
+import Preloader from '@/components/Preloader'
+import { AnimatePresence } from 'framer-motion'
 import { SiTypescript, SiReact, SiNextdotjs, SiTailwindcss, SiNodedotjs, SiPython, SiPostgresql, SiMongodb, SiDocker, SiAmazonwebservices } from 'react-icons/si'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Ensuring the preloader stays for a consistent premium feel
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const techLogos = [
     { node: <SiReact />, title: "React", href: "https://react.dev" },
@@ -58,6 +70,9 @@ function App() {
 
   return (
     <div className="relative min-h-screen scroll-smooth">
+      <AnimatePresence mode="wait">
+        {isLoading && <Preloader key="preloader" />}
+      </AnimatePresence>
       <Navigation activeSection={activeSection} />
       <main>
         <HeroSection />

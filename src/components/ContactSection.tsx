@@ -42,7 +42,7 @@ const ContactSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    
+
     // Simulate form submission
     setTimeout(() => {
       setIsSubmitting(false)
@@ -54,7 +54,7 @@ const ContactSection = () => {
         subject: '',
         message: ''
       })
-      
+
       // Show success message (you can add toast notification here)
       alert('Thank you for your message! I\'ll get back to you soon.')
     }, 2000)
@@ -63,7 +63,7 @@ const ContactSection = () => {
   const handleSocialClick = (platform: string) => {
     const urls = {
       github: 'https://github.com/raycre8-g',
-      linkedin: 'https://www.linkedin.com/in/aderemiazeez?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
+      linkedin: 'https://www.linkedin.com/in/aderemi-azeez-oluwasegun-?utm_source=share_via&utm_content=profile&utm_medium=member_ios',
       email: 'mailto:aderemi@raydar.dev'
     }
     window.open(urls[platform as keyof typeof urls], '_blank')
@@ -83,15 +83,15 @@ const ContactSection = () => {
             <p className="text-lg text-muted-foreground font-light leading-relaxed">
               Open for new opportunities, collaborations, or just a chat about system architecture and product engineering.
             </p>
-            
+
             <div className="space-y-6 pt-8">
               {[
                 { label: 'Email', value: 'aderemi@raydar.dev', icon: <Mail className="w-4 h-4" />, action: () => handleSocialClick('email') },
                 { label: 'LinkedIn', value: 'Aderemi Azeez', icon: <Linkedin className="w-4 h-4" />, action: () => handleSocialClick('linkedin') },
                 { label: 'GitHub', value: '@raycre8-g', icon: <Github className="w-4 h-4" />, action: () => handleSocialClick('github') }
               ].map((item, i) => (
-                <button 
-                  key={i} 
+                <button
+                  key={i}
                   onClick={item.action}
                   className="flex items-center gap-6 group w-full text-left"
                 >
@@ -137,7 +137,7 @@ const ContactSection = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="subject" className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ml-1">Subject</Label>
                   <Input
@@ -150,7 +150,7 @@ const ContactSection = () => {
                     className="bg-white/[0.03] border-white/5 rounded-2xl p-6 h-auto placeholder:text-white/20 focus:bg-white/[0.05] transition-all"
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="message" className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ml-1">Message</Label>
                   <Textarea
